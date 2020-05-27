@@ -1,0 +1,38 @@
+﻿@page "/Login"
+@inject NavigationManager navigationManager 
+@using CustomAuth
+
+
+@inject MyAuthenticationStateProvider MyAuthStateProvider
+
+
+<h1>Login</h1>
+
+<EditForm Model="credentials" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-signin text-center">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <InputText type="email" id="inputEmail" @bind-Value="credentials.login" class="form-control" placeholder="Email address" />
+        <InputText type="password" id="inputPassword" @bind-Value="credentials.password" class="form-control" placeholder="Password" />        
+        <ValidationSummary/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>        
+    </div>
+</EditForm>
+
+
+@code
+{
+    Credentials credentials = new Credentials();
+    protected override void OnInitialized()
+    {
+        //pre-populate fields for demo only !
+        credentials.login = "john@doe.com";
+        credentials.password = "myp@ssword";
+    }
+    void HandleValidSubmit()
+    {
+        MyAuthStateProvider.setAuthentication(credentials.login);
+        navigationManager.NavigateTo("");
+    }
+
+}

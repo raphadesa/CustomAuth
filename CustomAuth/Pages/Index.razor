@@ -1,0 +1,38 @@
+﻿@page "/"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject MyAuthenticationStateProvider MyAuthStateProvider
+
+<h3>Auth Status</h3>
+
+<AuthorizeView>
+    <NotAuthorized>
+        <a href="/Login">Login</a>
+    </NotAuthorized>
+    <Authorized>
+        <a href="/SignOut">Sign out</a>
+    </Authorized>
+</AuthorizeView>
+
+    <p>@authMessage</p>
+
+    @code {
+        string authMessage;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            var authState = await MyAuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                authMessage = $"{user.Identity.Name} is authenticated.";
+            }
+            else
+            {
+                authMessage = "The user is NOT authenticated.";
+            }
+        }
+    }
+
